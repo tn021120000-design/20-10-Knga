@@ -16,8 +16,8 @@
         }
 
         body {
-            /* Nền chuyển màu từ hồng pastel sang đỏ velvet ruby */
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 30%, #880e4f 100%);
+            /* Nền ruby lãng mạn, tối màu hơn để làm nổi bật thư */
+            background: linear-gradient(135deg, #4a041f 0%, #880e4f 50%, #ff9a9e 100%);
             height: 100vh;
             overflow: hidden;
             font-family: 'Quicksand', sans-serif;
@@ -28,7 +28,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Canvas chứa hiệu ứng trái tim bay */
         #particles {
             position: absolute;
             top: 0;
@@ -39,7 +38,6 @@
             pointer-events: none;
         }
 
-        /* Khu vực hiển thị bức thư */
         .wrapper {
             position: relative;
             z-index: 10;
@@ -47,41 +45,37 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
 
         .envelope-container {
             position: relative;
-            width: 90vw;
-            max-width: 400px;
-            height: 260px;
+            width: 88vw;
+            max-width: 450px;
+            /* Dùng aspect-ratio thay cho chiều cao cứng để luôn giữ đúng tỷ lệ phong bì */
+            aspect-ratio: 1.5; 
             cursor: pointer;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Hiệu ứng phát sáng nhẹ khi thư chưa mở */
         @keyframes envelopeGlow {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 154, 158, 0.4)); }
-            50% { filter: drop-shadow(0 0 25px rgba(255, 154, 158, 0.8)); }
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 154, 158, 0.3)); }
+            50% { filter: drop-shadow(0 0 25px rgba(255, 154, 158, 0.7)); }
         }
 
         .envelope-container:not(.open) {
             animation: envelopeGlow 3s infinite;
         }
 
-        /* Khi mở thư, đẩy bao thư xuống để thẻ chúc mừng nằm giữa màn hình */
         .envelope-container.open {
-            transform: translateY(140px);
-            pointer-events: none; /* Vô hiệu hóa click lại */
+            transform: translateY(12vh); /* Đẩy phong bì xuống một chút tạo không gian cho chữ */
+            pointer-events: none;
         }
 
-        /* Các thành phần của bao thư */
         .envelope-back {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ad1457; /* Màu đỏ ruby sâu */
+            inset: 0;
+            background: #6a0b3a; 
             border-radius: 8px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             z-index: 1;
@@ -89,8 +83,8 @@
 
         .flap-left {
             position: absolute;
-            width: 100%; height: 100%;
-            background: linear-gradient(to right, #d81b60, #e91e63);
+            inset: 0;
+            background: linear-gradient(to right, #b01053, #d81b60);
             clip-path: polygon(0 0, 51% 51%, 0 100%);
             border-radius: 8px 0 0 8px;
             z-index: 3;
@@ -98,8 +92,8 @@
 
         .flap-right {
             position: absolute;
-            width: 100%; height: 100%;
-            background: linear-gradient(to left, #d81b60, #e91e63);
+            inset: 0;
+            background: linear-gradient(to left, #b01053, #d81b60);
             clip-path: polygon(100% 0, 49% 51%, 100% 100%);
             border-radius: 0 8px 8px 0;
             z-index: 3;
@@ -107,8 +101,8 @@
 
         .flap-bottom {
             position: absolute;
-            width: 100%; height: 100%;
-            background: linear-gradient(to top, #c2185b, #e91e63);
+            inset: 0;
+            background: linear-gradient(to top, #9c0d48, #d81b60);
             clip-path: polygon(0 100%, 51% 49%, 100% 100%);
             border-radius: 0 0 8px 8px;
             z-index: 3;
@@ -116,129 +110,106 @@
 
         .flap-top {
             position: absolute;
-            width: 100%; height: 100%;
-            background: linear-gradient(to bottom, #f06292, #e91e63);
+            inset: 0;
+            background: linear-gradient(to bottom, #d81b60, #e91e63);
             clip-path: polygon(0 0, 51% 51%, 100% 0);
             border-radius: 8px 8px 0 0;
             transform-origin: top;
-            /* Thay đổi z-index giữa chừng để nắp bao thư lật ra đằng sau thẻ */
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 4;
         }
 
-        /* Trạng thái nắp bao thư khi mở */
         .envelope-container.open .flap-top {
             transform: rotateX(180deg);
-            z-index: 1; 
+            z-index: 0; 
         }
 
-        /* Thẻ chúc mừng nằm bên trong */
+        /* THẺ CHÚC MỪNG BÊN TRONG */
         .letter {
             position: absolute;
-            left: 10px; right: 10px; bottom: 10px;
-            height: 240px;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            height: auto; /* Tự động thay đổi chiều cao để không bao giờ tràn chữ */
+            min-height: calc(100% - 20px);
             background: white;
             border-radius: 6px;
-            z-index: 2;
-            padding: 10px;
+            z-index: 2; /* Nằm bên trong thư ban đầu */
+            padding: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            box-sizing: border-box;
         }
 
         .letter-content {
-            border: 2px solid #ffdde1;
+            border: 2px dashed #ffb6c1;
             background: radial-gradient(circle at center, #ffffff 0%, #fff5f7 100%);
-            height: 100%;
             border-radius: 4px;
+            padding: 1.5rem;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 15px;
-            position: relative;
-            box-sizing: border-box;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            overflow: hidden;
-            width: 100%;
         }
 
-        /* Trạng thái thẻ nổi lên khi mở */
+        /* ANIMATION RÚT THƯ THÔNG MINH */
         .envelope-container.open .letter {
-            /* Dùng animation rút hoàn toàn thư ra rồi đặt lên trước phong bì */
-            animation: pullOut 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: pullOutFront 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
 
-        @keyframes pullOut {
-            0%, 20% { transform: translateY(0) scale(1); z-index: 2; }
-            55% { transform: translateY(-280px) scale(1); z-index: 2; }
-            60% { transform: translateY(-280px) scale(1); z-index: 10; }
-            100% { transform: translateY(-130px) scale(1.15); z-index: 10; }
+        @keyframes pullOutFront {
+            0% { transform: translateY(0) scale(1); z-index: 2; }
+            45% { transform: translateY(-115%) scale(1); z-index: 2; } /* Rút hoàn toàn ra khỏi bao thư */
+            50% { transform: translateY(-115%) scale(1); z-index: 20; } /* Đưa lớp layer lên trước cùng */
+            100% { transform: translateY(-30%) scale(1.05); z-index: 20; } /* Đặt thư xuống trước bìa, phóng to một chút */
         }
 
-        @keyframes pullOutMobile {
-            0%, 20% { transform: translateY(0) scale(1); z-index: 2; }
-            55% { transform: translateY(-240px) scale(1); z-index: 2; }
-            60% { transform: translateY(-240px) scale(1); z-index: 10; }
-            100% { transform: translateY(-110px) scale(1.15); z-index: 10; }
-        }
-
-        @keyframes pullOutMini {
-            0%, 20% { transform: translateY(0) scale(1); z-index: 2; }
-            55% { transform: translateY(-220px) scale(1); z-index: 2; }
-            60% { transform: translateY(-220px) scale(1); z-index: 10; }
-            100% { transform: translateY(-100px) scale(1.1); z-index: 10; }
-        }
-
-        /* Định dạng chữ trong thẻ */
+        /* HỆ THỐNG KÍCH THƯỚC CHỮ TỰ ĐỘNG (RESPONSIVE CLAMP) */
         .title {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.6rem;
+            font-size: clamp(2rem, 8vw, 3rem);
             color: #c2185b;
-            margin-bottom: 8px;
-            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
             text-shadow: 1px 1px 2px rgba(194, 24, 91, 0.1);
         }
 
         .body-text {
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 12px;
+            font-size: clamp(0.9rem, 4vw, 1.15rem);
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 1rem;
             font-weight: 500;
         }
 
         .signature {
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
             color: #d81b60;
         }
 
         .signature-name {
-            font-size: 1.8rem;
+            font-size: clamp(1.8rem, 7vw, 2.5rem);
             font-family: 'Great Vibes', cursive;
             color: #c2185b;
             display: inline-block;
             margin-top: 5px;
         }
 
-        /* Lời nhắn hướng dẫn chạm */
         .instruction {
             position: absolute;
-            bottom: -50px;
+            bottom: -40px;
             left: 0;
             width: 100%;
             text-align: center;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             letter-spacing: 1px;
-            opacity: 0.9;
-            transition: opacity 0.5s;
             animation: pulseText 2s infinite;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            transition: opacity 0.5s;
         }
 
         .envelope-container.open .instruction {
@@ -249,30 +220,6 @@
         @keyframes pulseText {
             0%, 100% { transform: scale(1); opacity: 0.9; }
             50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        /* Đáp ứng màn hình nhỏ */
-        @media screen and (max-width: 600px) {
-            .envelope-container { height: 230px; }
-            .envelope-container.open { transform: translateY(120px); }
-            .letter { height: 210px; }
-            .envelope-container.open .letter { animation: pullOutMobile 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-            .title { font-size: 2.2rem; margin-bottom: 6px; }
-            .body-text { font-size: 0.95rem; line-height: 1.4; margin-bottom: 10px; }
-            .signature { font-size: 1rem; }
-            .signature-name { font-size: 1.6rem; }
-        }
-
-        @media screen and (max-width: 400px) {
-            .envelope-container { height: 200px; }
-            .envelope-container.open { transform: translateY(100px); }
-            .letter { height: 185px; padding: 6px; }
-            .letter-content { padding: 10px; }
-            .envelope-container.open .letter { animation: pullOutMini 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-            .title { font-size: 1.7rem; margin-bottom: 4px; }
-            .body-text { font-size: 0.8rem; line-height: 1.35; margin-bottom: 6px; }
-            .signature { font-size: 0.85rem; }
-            .signature-name { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -291,7 +238,7 @@
                 <div class="letter-content">
                     <h1 class="title">Gửi Kim Ngà,</h1>
                     <p class="body-text">
-                        Nhân ngày Phụ nữ Việt Nam 20/10, chúc công chúa của anh luôn rạng rỡ, xinh đẹp và ngập tràn hạnh phúc. Cảm ơn em vì đã luôn ở bên anh.
+                        Chúc em ngày 20/10 thật nhiều niềm vui, luôn xinh đẹp và hạnh phúc bên anh. Cảm ơn em đã đến và làm cho cuộc sống của anh thêm rực rỡ.
                     </p>
                     <p class="signature">Yêu em,<br><span class="signature-name">Thành Nhân</span> ❤️</p>
                 </div>
