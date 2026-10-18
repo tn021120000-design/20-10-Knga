@@ -51,7 +51,8 @@
 
         .envelope-container {
             position: relative;
-            width: 400px;
+            width: 90vw;
+            max-width: 400px;
             height: 260px;
             cursor: pointer;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -251,27 +252,27 @@
         }
 
         /* Đáp ứng màn hình nhỏ */
-        @media (max-width: 480px) {
-            .envelope-container { width: 340px; height: 220px; }
+        @media screen and (max-width: 600px) {
+            .envelope-container { height: 230px; }
             .envelope-container.open { transform: translateY(120px); }
-            .letter { height: 200px; }
+            .letter { height: 210px; }
             .envelope-container.open .letter { animation: pullOutMobile 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-            .title { font-size: 2.2rem; }
-            .body-text { font-size: 0.95rem; }
+            .title { font-size: 2.2rem; margin-bottom: 6px; }
+            .body-text { font-size: 0.95rem; line-height: 1.4; margin-bottom: 10px; }
             .signature { font-size: 1rem; }
             .signature-name { font-size: 1.6rem; }
         }
 
-        @media (max-width: 380px) {
-            .envelope-container { width: 300px; height: 195px; }
+        @media screen and (max-width: 400px) {
+            .envelope-container { height: 200px; }
             .envelope-container.open { transform: translateY(100px); }
-            .letter { height: 180px; padding: 6px; }
-            .letter-content { padding: 12px; }
+            .letter { height: 185px; padding: 6px; }
+            .letter-content { padding: 10px; }
             .envelope-container.open .letter { animation: pullOutMini 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-            .title { font-size: 1.8rem; margin-bottom: 6px; }
-            .body-text { font-size: 0.85rem; line-height: 1.4; margin-bottom: 8px; }
-            .signature { font-size: 0.9rem; }
-            .signature-name { font-size: 1.4rem; }
+            .title { font-size: 1.7rem; margin-bottom: 4px; }
+            .body-text { font-size: 0.8rem; line-height: 1.35; margin-bottom: 6px; }
+            .signature { font-size: 0.85rem; }
+            .signature-name { font-size: 1.3rem; }
         }
     </style>
 </head>
